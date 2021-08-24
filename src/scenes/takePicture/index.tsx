@@ -6,7 +6,7 @@ interface Props {
     navigation: any
 }
 
-function TakePicture({ route, navigation }: Props) {
+const TakePicture = ({ route, navigation }: Props) => {
     return(
         <SafeAreaView>
             <TouchableHighlight onPress={() => navigation.goBack()}>
