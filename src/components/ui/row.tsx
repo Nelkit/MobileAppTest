@@ -12,10 +12,10 @@ const Row = ({ flex=1, children }: Props) => {
 
 const styles = StyleSheet.create({
     row: {
-      display:'flex',
-      justifyContent: 'flex-start',
-      flexDirection:'row',
-      alignItems:'center',
+      	display:'flex',
+      	justifyContent: 'flex-start',
+      	flexDirection:'row',
+      	alignItems:'center',
     },
   });
 

@@ -1,4 +1,4 @@
-import React, {useState, useEffect, useRef} from 'react';
+import React, {useState, useEffect} from 'react';
 import * as Battery from 'expo-battery';
 import Label from './../../components/ui/label';
 import Row from './../../components/ui/row';
@@ -8,39 +8,31 @@ import Container from './../../components/ui/container';
 import BatteryIcon from './../icons/batteryIcon';
 import {fonts, colors} from './../../styles/base';
 
-const useInterval = (callback: any, delay:number) => {
-  const savedCallback = useRef();
-
-  useEffect(() => {
-    savedCallback.current = callback;
-  });
-
-  useEffect(() => {
-    function tick() {
-      savedCallback.current;
-    }
-
-    let id = setInterval(tick, delay);
-    return () => clearInterval(id);
-  }, [delay]);
-}
-
 const BatteryStatus = () => {
   const [batteryLevel, setBatteryLevel] = useState(0);
-  
+  let subscription: { remove: any; } | null = null;
+
+  const subscribe = async () => {
+    let batteryLevel = await Battery.getBatteryLevelAsync();
+    setBatteryLevel(batteryLevel); 
+    
+    subscription = Battery.addBatteryLevelListener(({ batteryLevel }) => {
+      setBatteryLevel(batteryLevel);
+    });
+  }
+
+  const unsubscribe = () => {
+    subscription && subscription.remove();
+    subscription = null;
+  }
+
   useEffect(() => {
-    Battery.getBatteryLevelAsync().then((batteryLevel) => {
-      setBatteryLevel(batteryLevel);
-    });
-  }, []);
+    subscribe()
 
-  useInterval(() => {
-    Battery.getBatteryLevelAsync().then((batteryLevel) => {
-      setBatteryLevel(batteryLevel);
-      console.log(batteryLevel)
-    });
-  }, 60 * 1000);
-
+    return () => {
+      unsubscribe()
+    }
+  })
 
   return(
     <Card borderRadius={15}>

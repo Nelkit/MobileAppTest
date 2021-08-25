@@ -4,6 +4,7 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
 import LandingPage from './../scenes/landingPage';
 import TakePicture from './../scenes/takePicture';
+import DisplayPicture from './../scenes/displayPicture';
 
 const Stack = createNativeStackNavigator();
 
@@ -21,6 +22,13 @@ function App() {
             component={TakePicture} 
             options={{ animation: 'slide_from_right'}}
         />
+        <Stack.Screen 
+            name="DisplayPicture" 
+            component={DisplayPicture} 
+            options={{ animation: 'slide_from_right'}}
+        />
+
+
       </Stack.Navigator>
     </NavigationContainer>
   );

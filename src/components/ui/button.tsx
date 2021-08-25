@@ -41,11 +41,11 @@ const Button = ({
             }}
             disabled={disabled}
             style = {isPress ? styles.btnPress : styles.btnNormal}
-            activeOpacity={disabled ? 0.1 : 1}
             onPress={onPress}>
             <View style={[
                 styles.button,
                 {
+                    opacity: disabled ? 0.4 : 1,
                     backgroundColor: backgroundColor,
                     borderRadius: borderRadius,
                     height: height,

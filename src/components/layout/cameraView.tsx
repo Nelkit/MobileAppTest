@@ -1,77 +1,134 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { StyleSheet, Text, View, TouchableOpacity } from 'react-native';
+import { StyleSheet, Text, View, Image} from 'react-native';
+import Row from './../ui/row';
+import Col from './../ui/col';
+import Label from './../ui/label'
+import Button from './../ui/button';
+import { padding, colors, fonts } from './../../styles/base';
 import { Camera } from 'expo-camera';
 
-const CameraView = () => {
-  const [hasPermission, setHasPermission] = useState(null);
-  const [type, setType] = useState(Camera.Constants.Type.back);
-  const ref = useRef(null)
+interface Props {
+    onTapNext: (uri?: string) => {}
+}
 
-  useEffect(() => {
-    (async () => {
-      const { status } = await Camera.requestPermissionsAsync();
-      setHasPermission(status === 'granted');
-    })();
-  }, []);
+const CameraView = ({onTapNext}: Props) => {
+	const [hasPermission, setHasPermission] = useState(null);
+	const [type, setType] = useState(Camera.Constants.Type.back);
+	const [photoPreview, setPhotoPreview] = useState(null);
+	const ref = useRef(null)
+    
+	const provideAccessToCamera = () => {
+		(async () => {
+			const { status } = await Camera.requestPermissionsAsync();
+			setHasPermission(status === 'granted');
+		})();
+    }
 
-  const takePicture = async () => {
-    const photo = await ref.current.takePictureAsync()
-    console.debug(photo)
-  };
+	useEffect(() => {
+		provideAccessToCamera();
+	}, []);
 
-  if (hasPermission === null) {
-    return <View />;
-  }
-  if (hasPermission === false) {
-    return <Text>No access to camera</Text>;
-  }
-  return (
-    <View style={styles.container}>
-      <Camera style={styles.camera} type={type} ref={ref}>
-        <View style={styles.buttonContainer}>
-          <TouchableOpacity
-            style={styles.button}
-            onPress={() => {
-              setType(
-                type === Camera.Constants.Type.back
-                  ? Camera.Constants.Type.front
-                  : Camera.Constants.Type.back
-              );
-            }}>
-            <Text style={styles.text}> Flip </Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            onPress={takePicture}
-          >
-            <Text>Snap Photo</Text>
-          </TouchableOpacity>
-        </View>
-      </Camera>
-    </View>
-  );
+	const takePicture = async () => {
+		const photo = await ref.current.takePictureAsync()
+		const { uri } = photo;
+		console.log(uri)
+		setPhotoPreview(uri)
+	};
+
+	if (hasPermission === null) {
+		return <View />;
+	}
+	if (hasPermission === false) {
+		return (
+			<Row>   
+				<Col>				
+					<Label fontSize={14} paddingBottom={10}>No access to camera</Label>
+					<Button
+						title="Provide Access to Camera"
+						fontSize={fonts.sm}
+						color={colors.textIcons}  
+						backgroundColor={colors.primaryText} 
+						onPress={provideAccessToCamera}
+					/>                                  
+				</Col>                         
+			</Row>
+		);
+	}
+	return (
+		<View style={styles.box}>
+			{ photoPreview != null && (
+				<Row flex={1}>
+					<Col>
+
+					</Col> 
+					<Col>
+
+					</Col> 
+					<Col paddingLeft={padding.sm}>
+						<Button 
+							fontSize={12}
+							title="Clear" 
+							color={colors.textIcons}  
+							backgroundColor={colors.secondaryText} 
+							onPress={async () => setPhotoPreview(null)}
+						/>
+					</Col> 
+				</Row>
+			)}
+			<Row flex={5}>
+				<Col>
+					{ photoPreview != null ? (
+						<Image style={styles.box}  source={{uri: photoPreview}}/>
+					):(
+						<Camera style={styles.box} type={type} ref={ref} />
+					)}
+				</Col>
+			</Row>
+			<Row flex={1}>
+				<Col>
+				<Button 
+					title="Flip Camera" 
+					fontSize={12}
+					paddingHorizontal={5}
+					color={colors.textIcons}  
+					backgroundColor={colors.accent} 
+					onPress={async () => setType(
+					type === Camera.Constants.Type.back
+						? Camera.Constants.Type.front
+						: Camera.Constants.Type.back
+					)}
+				/>
+				</Col> 
+				<Col paddingLeft={padding.sm}>
+				<Button 
+					title="Take Picture" 
+					fontSize={12}
+					paddingHorizontal={5}
+					color={colors.textIcons}  
+					backgroundColor={colors.primaryText} 
+					onPress={takePicture}
+					/>
+				</Col> 
+				<Col paddingLeft={padding.sm}>
+				<Button 
+					title="Next" 
+					fontSize={12}
+					paddingHorizontal={5}
+					color={colors.textIcons}  
+					backgroundColor={colors.primary} 
+					disabled={photoPreview==null}
+					disabledText="Next"
+					onPress={()=>onTapNext(photoPreview)}
+				/>
+				</Col> 
+			</Row>
+		</View>
+	);
 }
 
 const styles = StyleSheet.create({
-  container: {
+  box: {
     flex: 1,
-  },
-  camera: {
-    flex: 1,
-  },
-  buttonContainer: {
-    flex: 1,
-    backgroundColor: 'transparent',
-    flexDirection: 'row',
-    margin: 20,
-  },
-  button: {
-    flex: 0.1,
-    alignSelf: 'flex-end',
-    alignItems: 'center',
-  },
-  text: {
-    fontSize: 18,
-    color: 'white',
   },
 });
 

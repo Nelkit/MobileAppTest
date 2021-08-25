@@ -24,7 +24,8 @@ const Container = ({
                     paddingLeft: paddingLeft, 
                     paddingRight: paddingRight, 
                     paddingBottom: paddingBottom, 
-                    height: '100%'
+                    height: '100%',
+                    width: '100%',
                 }}
             >{children}</View>
         );
