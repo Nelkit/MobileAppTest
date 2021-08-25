@@ -5,7 +5,7 @@ type Props = {
     weight?: number,
     paddingLeft?: number,
     paddingTop?: number,
-    children: JSX.Element,
+    children: JSX.Element|JSX.Element[],
 };
 
 const Col = ({ weight = 1, paddingLeft = 0, paddingTop=0, children }: Props) => {

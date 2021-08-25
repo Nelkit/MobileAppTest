@@ -1,14 +1,12 @@
 import React, {useState, useEffect} from 'react';
-import {SafeAreaView, DeviceEventEmitter} from 'react-native';
-import Card from './../../components/ui/card';
+import {SafeAreaView, View} from 'react-native';
 import Col from './../../components/ui/col';
 import Row from './../../components/ui/row';
 import Button from '../../components/ui/button';
-import Label from './../../components/ui/label';
 import Container from './../../components/ui/container';
 import BatteryStatus from './../../components/layout/batteryStatus';
-import {colors, fonts, padding} from './../../styles/base';
-import * as Battery from 'expo-battery';
+import NetworkStatus from './../../components/layout/networkStatus';
+import {colors, padding} from './../../styles/base';
 
 interface Props {
     route: any,
@@ -19,33 +17,23 @@ const LandingPage = ({ route, navigation }: Props) => {
     return(
         <SafeAreaView>
             <Container>
-                <Container paddingLeft={0} paddingRight={0}>
-                    <Row>
-                        <Col>
-                            <BatteryStatus />
-                        </Col> 
-                        <Col paddingLeft={padding.sm}>
-                            <Card borderRadius={15}>
-                                <Container>
-                                    <Label color={colors.secondaryText}>Internet Connection</Label>
-                                    <Label fontSize={fonts.md}>Status</Label>
-                                </Container>
-                            </Card>
-                        </Col> 
-                    </Row>
-                </Container>
-                <Row>
-                    <Col>                    
+                <Row flex={1}>
+                    <Col>
+                        <BatteryStatus />
+                    </Col> 
+                    <Col paddingLeft={padding.sm}>
+                        <NetworkStatus />
+                    </Col> 
+                </Row>
+                <Row flex={2}>
+                    <Col paddingTop={padding.sm}>                    
                         <Button 
                             title="Take new picture" 
                             color={colors.textIcons}  
                             backgroundColor={colors.primary} 
                             onPress={() => navigation.push('TakePicture')}
                         />
-                    </Col>
-                </Row>
-                <Row>
-                    <Col paddingTop={padding.sm}>  
+                        <View style={{height: 20}} />
                         <Button 
                             title="Load Picture from Gallery" 
                             color={colors.textIcons}  
@@ -53,6 +41,9 @@ const LandingPage = ({ route, navigation }: Props) => {
                             onPress={() => navigation.push('TakePicture')}
                         />
                     </Col>
+                </Row>
+                <Row flex={5}>
+                    
                 </Row>
             </Container>
         </SafeAreaView>
