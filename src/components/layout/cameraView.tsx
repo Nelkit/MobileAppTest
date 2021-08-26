@@ -4,6 +4,7 @@ import Row from './../ui/row';
 import Col from './../ui/col';
 import Label from './../ui/label'
 import Button from './../ui/button';
+import Preview from './../ui/preview';
 import { padding, colors, fonts } from './../../styles/base';
 import { Camera } from 'expo-camera';
 
@@ -55,7 +56,7 @@ const CameraView = ({onTapNext}: Props) => {
 		);
 	}
 	return (
-		<View style={styles.box}>
+		<View style={styles.mainBox}>
 			{ photoPreview != null && (
 				<Row flex={1}>
 					<Col>
@@ -78,9 +79,9 @@ const CameraView = ({onTapNext}: Props) => {
 			<Row flex={5}>
 				<Col>
 					{ photoPreview != null ? (
-						<Image style={styles.box}  source={{uri: photoPreview}}/>
+						<Preview   uri={photoPreview}/>
 					):(
-						<Camera style={styles.box} type={type} ref={ref} />
+						<Camera style={styles.cameraBox} type={type} ref={ref} />
 					)}
 				</Col>
 			</Row>
@@ -92,6 +93,8 @@ const CameraView = ({onTapNext}: Props) => {
 					paddingHorizontal={5}
 					color={colors.textIcons}  
 					backgroundColor={colors.accent} 
+					disabled={photoPreview!=null}
+					disabledText="Flip Camera"
 					onPress={async () => setType(
 					type === Camera.Constants.Type.back
 						? Camera.Constants.Type.front
@@ -106,6 +109,8 @@ const CameraView = ({onTapNext}: Props) => {
 					paddingHorizontal={5}
 					color={colors.textIcons}  
 					backgroundColor={colors.primaryText} 
+					disabled={photoPreview!=null}
+					disabledText="Take Picture"
 					onPress={takePicture}
 					/>
 				</Col> 
@@ -127,9 +132,13 @@ const CameraView = ({onTapNext}: Props) => {
 }
 
 const styles = StyleSheet.create({
-  box: {
-    flex: 1,
-  },
+	mainBox: {
+		paddingTop: padding.sm,
+		flex: 1,
+	},
+	cameraBox: {
+		flex: 1,
+	},
 });
 
 export default CameraView;

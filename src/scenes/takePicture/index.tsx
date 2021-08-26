@@ -1,5 +1,6 @@
 import React from 'react';
 import {SafeAreaView} from 'react-native';
+import { StatusBar } from 'expo-status-bar';
 import Col from './../../components/ui/col';
 import Row from './../../components/ui/row';
 import Container from './../../components/ui/container';
@@ -16,8 +17,9 @@ interface Props {
 const TakePicture = ({ route, navigation }: Props) => {
     return(
         <SafeAreaView>
+            <StatusBar style="dark" />
             <Container>
-                <Row flex={1}>
+                <Row flex={1.2}>
                     <Col>
                         <BatteryStatus />
                     </Col> 
@@ -25,7 +27,7 @@ const TakePicture = ({ route, navigation }: Props) => {
                         <NetworkStatus />
                     </Col> 
                 </Row>
-                <Row flex={7}>
+                <Row flex={8}>
                     <CameraView onTapNext={(uri) => navigation.push('DisplayPicture', {photoUri: uri})}/>
                 </Row>
             </Container>

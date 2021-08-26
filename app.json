@@ -17,13 +17,15 @@
       "**/*"
     ],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.sumadimobiletest.nelkitchavez"
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./src/assets/images/adaptive-icon.png",
         "backgroundColor": "#FFFFFF"
-      }
+      },
+      "package": "com.sumadimobiletest.nelkitchavez"
     },
     "web": {
       "favicon": "./src/assets/images/favicon.png"

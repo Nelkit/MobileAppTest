@@ -1,22 +1,25 @@
 import React, {useState} from 'react';
-import {SafeAreaView, Image, StyleSheet, Text, ScrollView, ActivityIndicator, View} from 'react-native';
+import { StatusBar } from 'expo-status-bar';
+import {SafeAreaView, StyleSheet, Text, ScrollView} from 'react-native';
 import * as MediaLibrary from 'expo-media-library';
 import * as FileSystem from 'expo-file-system';
 import Col from './../../components/ui/col';
 import Button from './../../components/ui/button';
 import Row from './../../components/ui/row';
+import Progress from './../../components/ui/progress';
 import Container from './../../components/ui/container';
+import Preview from './../../components/ui/preview';
 import BatteryStatus from './../../components/layout/batteryStatus';
 import NetworkStatus from './../../components/layout/networkStatus';
-import {padding, colors} from './../../styles/base';
+import {padding, colors, margin} from './../../styles/base';
 import Services from './../../services';
+import Utils from './../../utils';
 
 interface Props {
     route: any,
-    navigation: any
 }
 
-const DisplayPicture = ({ route, navigation }: Props) => {
+const DisplayPicture = ({ route }: Props) => {
     const { photoUri } = route.params
     const [imaggaResponse, setImaggaResponse] = useState('');
     const [isLoading, setIsLoading] = useState(false);
@@ -27,11 +30,9 @@ const DisplayPicture = ({ route, navigation }: Props) => {
         let fileBase64 = await FileSystem.readAsStringAsync(photoUri, { encoding: 'base64'  });
         var request = Services.postImaggaTag(fileBase64)
         request.then(response => {
-            console.log("respuesta correcta")
             setImaggaResponse(`${JSON.stringify(response)}`)
             setIsLoading(false)
         }).catch(error => {
-            console.log("error de respuesta")
             setIsLoading(false)
         })
  
@@ -40,7 +41,7 @@ const DisplayPicture = ({ route, navigation }: Props) => {
     const savePictureInGallery = () => {
         (async () => {
             const asset = await MediaLibrary.createAssetAsync(photoUri);
-            console.log("Guardado en Galeria")
+            Utils.sendLocalNotification("The current image is saved", "Saved image in gallery")
         })(); 
 
         postImaggaTag();
@@ -48,8 +49,9 @@ const DisplayPicture = ({ route, navigation }: Props) => {
 
     return(
         <SafeAreaView>
+            <StatusBar style="dark" />
             <Container>
-                <Row flex={1}>
+                <Row flex={1.2}>
                     <Col>
                         <BatteryStatus />
                     </Col> 
@@ -59,16 +61,13 @@ const DisplayPicture = ({ route, navigation }: Props) => {
                 </Row>
                 <Row flex={4}>
                     <Col>
-                        <Image  source={{uri: photoUri}} style={styles.box} />
+                        <Preview uri={photoUri} />  
                     </Col>
                 </Row>
                 <Row flex={4}>
-                    <ScrollView>
+                    <ScrollView style={styles.responseBox}>
                         {isLoading ? (
-                            <View style={{width: '100%', height:100, flex: 1, justifyContent: "center", alignItems:'center'}}>
-                                    <ActivityIndicator color="#0000f2" size="large" />
-                                    <Text>Espera un momento...</Text>
-                            </View>
+                            <Progress />
                         ):(
                             <Text>{imaggaResponse}</Text>
                         )}
@@ -91,9 +90,14 @@ const DisplayPicture = ({ route, navigation }: Props) => {
 }
 
 const styles = StyleSheet.create({
-    box: {
-        flex: 1,
-    },
+    responseBox: {
+        borderRadius: 10,
+        borderColor: '#ddd',
+        borderWidth: 1,
+        backgroundColor: '#eee',
+        minHeight: 200,
+        padding: padding.sm
+    }
 });
 
 export default DisplayPicture;

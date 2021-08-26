@@ -10,7 +10,7 @@ import {fonts, colors} from './../../styles/base';
 
 const BatteryStatus = () => {
   const [batteryLevel, setBatteryLevel] = useState(0);
-  let subscription: { remove: any; } | null = null;
+  let subscription = null;
 
   const subscribe = async () => {
     let batteryLevel = await Battery.getBatteryLevelAsync();
