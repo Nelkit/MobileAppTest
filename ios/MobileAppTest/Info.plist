@@ -25,7 +25,7 @@
       <dict>
         <key>CFBundleURLSchemes</key>
         <array>
-          <string>com.sumadimobiletest.nelkitchavez</string>
+          <string>dev.mobiletest.nelkit</string>
         </array>
       </dict>
     </array>

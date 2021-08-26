@@ -18,14 +18,14 @@
     ],
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.sumadimobiletest.nelkitchavez"
+      "bundleIdentifier": "dev.mobiletest.nelkit"
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./src/assets/images/adaptive-icon.png",
         "backgroundColor": "#FFFFFF"
       },
-      "package": "com.sumadimobiletest.nelkitchavez"
+      "package": "dev.mobiletest.nelkit"
     },
     "web": {
       "favicon": "./src/assets/images/favicon.png"

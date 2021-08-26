@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import { StatusBar } from 'expo-status-bar';
 import {SafeAreaView, StyleSheet, Text, ScrollView} from 'react-native';
 import * as MediaLibrary from 'expo-media-library';
@@ -23,6 +23,10 @@ const DisplayPicture = ({ route }: Props) => {
     const { photoUri } = route.params
     const [imaggaResponse, setImaggaResponse] = useState('');
     const [isLoading, setIsLoading] = useState(false);
+
+    useEffect(()=>{
+        postImaggaTag();
+    },[])
     
     const postImaggaTag = async () => {
         setIsLoading(true)
@@ -40,9 +44,7 @@ const DisplayPicture = ({ route }: Props) => {
         (async () => {
             const asset = await MediaLibrary.createAssetAsync(photoUri);
             Toast.show("The current image is saved to gallery", {duration: Toast.durations.LONG, position: Toast.positions.CENTER});
-        })(); 
-
-        postImaggaTag();
+        })();
     }
 
     return(
