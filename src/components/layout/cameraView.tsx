@@ -13,9 +13,9 @@ interface Props {
 }
 
 const CameraView = ({onTapNext}: Props) => {
-	const [hasPermission, setHasPermission] = useState(null);
+	const [hasPermission, setHasPermission] = useState(false);
 	const [type, setType] = useState(Camera.Constants.Type.back);
-	const [photoPreview, setPhotoPreview] = useState(null);
+	const [photoUri, setPhotoUri] = useState(null);
 	const ref = useRef(null)
     
 	const provideAccessToCamera = () => {
@@ -32,8 +32,7 @@ const CameraView = ({onTapNext}: Props) => {
 	const takePicture = async () => {
 		const photo = await ref.current.takePictureAsync()
 		const { uri } = photo;
-		console.log(uri)
-		setPhotoPreview(uri)
+		setPhotoUri(uri)
 	};
 
 	if (hasPermission === null) {
@@ -57,7 +56,7 @@ const CameraView = ({onTapNext}: Props) => {
 	}
 	return (
 		<View style={styles.mainBox}>
-			{ photoPreview != null && (
+			{ photoUri != null && (
 				<Row flex={1}>
 					<Col>
 
@@ -71,15 +70,15 @@ const CameraView = ({onTapNext}: Props) => {
 							title="Clear" 
 							color={colors.textIcons}  
 							backgroundColor={colors.secondaryText} 
-							onPress={async () => setPhotoPreview(null)}
+							onPress={async () => setPhotoUri(null)}
 						/>
 					</Col> 
 				</Row>
 			)}
 			<Row flex={5}>
 				<Col>
-					{ photoPreview != null ? (
-						<Preview   uri={photoPreview}/>
+					{ photoUri != null ? (
+						<Preview   uri={photoUri}/>
 					):(
 						<Camera style={styles.cameraBox} type={type} ref={ref} />
 					)}
@@ -87,44 +86,44 @@ const CameraView = ({onTapNext}: Props) => {
 			</Row>
 			<Row flex={1}>
 				<Col>
-				<Button 
-					title="Flip Camera" 
-					fontSize={12}
-					paddingHorizontal={5}
-					color={colors.textIcons}  
-					backgroundColor={colors.accent} 
-					disabled={photoPreview!=null}
-					disabledText="Flip Camera"
-					onPress={async () => setType(
-					type === Camera.Constants.Type.back
-						? Camera.Constants.Type.front
-						: Camera.Constants.Type.back
-					)}
-				/>
-				</Col> 
-				<Col paddingLeft={padding.sm}>
-				<Button 
-					title="Take Picture" 
-					fontSize={12}
-					paddingHorizontal={5}
-					color={colors.textIcons}  
-					backgroundColor={colors.primaryText} 
-					disabled={photoPreview!=null}
-					disabledText="Take Picture"
-					onPress={takePicture}
+					<Button 
+						title="Flip Camera" 
+						fontSize={12}
+						paddingHorizontal={5}
+						color={colors.textIcons}  
+						backgroundColor={colors.accent} 
+						disabled={photoUri!=null}
+						disabledText="Flip Camera"
+						onPress={async () => setType(
+						type === Camera.Constants.Type.back
+							? Camera.Constants.Type.front
+							: Camera.Constants.Type.back
+						)}
 					/>
 				</Col> 
 				<Col paddingLeft={padding.sm}>
-				<Button 
-					title="Next" 
-					fontSize={12}
-					paddingHorizontal={5}
-					color={colors.textIcons}  
-					backgroundColor={colors.primary} 
-					disabled={photoPreview==null}
-					disabledText="Next"
-					onPress={()=>onTapNext(photoPreview)}
-				/>
+					<Button 
+						title="Take Picture" 
+						fontSize={12}
+						paddingHorizontal={5}
+						color={colors.textIcons}  
+						backgroundColor={colors.primaryText} 
+						disabled={photoUri!=null}
+						disabledText="Take Picture"
+						onPress={takePicture}
+						/>
+				</Col> 
+				<Col paddingLeft={padding.sm}>
+					<Button 
+						title="Next" 
+						fontSize={12}
+						paddingHorizontal={5}
+						color={colors.textIcons}  
+						backgroundColor={colors.primary} 
+						disabled={photoUri==null}
+						disabledText="Next"
+						onPress={()=>onTapNext(photoUri)}
+					/>
 				</Col> 
 			</Row>
 		</View>

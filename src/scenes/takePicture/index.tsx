@@ -10,11 +10,10 @@ import CameraView from './../../components/layout/cameraView';
 import {padding} from './../../styles/base';
 
 interface Props {
-    route: any,
     navigation: any
 }
 
-const TakePicture = ({ route, navigation }: Props) => {
+const TakePicture = ({ navigation }: Props) => {
     return(
         <SafeAreaView>
             <StatusBar style="dark" />

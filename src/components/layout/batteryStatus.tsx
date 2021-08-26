@@ -9,46 +9,40 @@ import BatteryIcon from './../icons/batteryIcon';
 import {fonts, colors} from './../../styles/base';
 
 const BatteryStatus = () => {
-  const [batteryLevel, setBatteryLevel] = useState(0);
-  let subscription = null;
+	const [batteryLevel, setBatteryLevel] = useState(0);
 
-  const subscribe = async () => {
-    let batteryLevel = await Battery.getBatteryLevelAsync();
-    setBatteryLevel(batteryLevel); 
-    
-    subscription = Battery.addBatteryLevelListener(({ batteryLevel }) => {
-      setBatteryLevel(batteryLevel);
-    });
-  }
+	const getLevel = async () => {
+		let batteryLevel = await Battery.getBatteryLevelAsync();
+		setBatteryLevel(batteryLevel); 
+	}
 
-  const unsubscribe = () => {
-    subscription && subscription.remove();
-    subscription = null;
-  }
+	useEffect(() => {
+		getLevel()
 
-  useEffect(() => {
-    subscribe()
+		const _subscription = Battery.addBatteryLevelListener(({ batteryLevel }) => {
+			setBatteryLevel(batteryLevel);
+		});
 
-    return () => {
-      unsubscribe()
-    }
-  })
+		return () =>{
+			_subscription.remove()
+		}
+	}, [])
 
-  return(
-    <Card borderRadius={15}>
-        <Container>
-          <Row>
-              <Col weight={1}>
-                <BatteryIcon batteryLevel={batteryLevel} />
-              </Col>
-              <Col weight={3}>
-                <Label color={colors.secondaryText}>Battery Status</Label>
-                <Label fontSize={fonts.md}>{`${Math.round(batteryLevel * 100)}%`}</Label>
-              </Col>
-          </Row>
-        </Container>
-    </Card>
-  )
+	return(
+		<Card borderRadius={15}>
+			<Container>
+			<Row>
+				<Col weight={1}>
+					<BatteryIcon batteryLevel={batteryLevel} />
+				</Col>
+				<Col weight={3}>
+					<Label color={colors.secondaryText}>Battery Status</Label>
+					<Label fontSize={fonts.md}>{`${Math.round(batteryLevel * 100)}%`}</Label>
+				</Col>
+			</Row>
+			</Container>
+		</Card>
+	)
   
 }
 

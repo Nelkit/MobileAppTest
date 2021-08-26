@@ -11,17 +11,17 @@ const Card = ({ borderRadius = 25, children }: Props) => {
 }
 
 const styles = StyleSheet.create({
-  card: {
-    backgroundColor: 'white',
-    borderBottomWidth: 0,
-    shadowColor: 'rgba(0,0,0,0.3)',
-    shadowOffset: {width: 0, height: 2},
-    shadowOpacity: 0.8,
-    shadowRadius: 2,
-    elevation: 2,
-    marginTop: 7,
-    marginBottom: 7,
-  },
+	card: {
+		backgroundColor: 'white',
+		borderBottomWidth: 0,
+		shadowColor: 'rgba(0,0,0,0.3)',
+		shadowOffset: {width: 0, height: 2},
+		shadowOpacity: 0.8,
+		shadowRadius: 2,
+		elevation: 2,
+		marginTop: 7,
+		marginBottom: 7,
+	},
 });
 
 export default Card;

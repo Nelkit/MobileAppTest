@@ -10,22 +10,21 @@ import Label from '../../components/ui/label';
 import Container from './../../components/ui/container';
 import BatteryStatus from './../../components/layout/batteryStatus';
 import NetworkStatus from './../../components/layout/networkStatus';
-import Logo from './../../components/layout/logo';
+import Logo from '../../components/ui/logo';
 import Utils from './../../utils';
 import {colors, fonts, margin, padding} from './../../styles/base';
 
 
 interface Props {
-    route: any,
     navigation: any
 }
 
-const LandingPage = ({ route, navigation }: Props) => {
+const LandingPage = ({ navigation }: Props) => {
     const [mediaLibraryPermission, setMediaLibraryPermission] = useState(false);
     const [notificationPermission, setNotificationPermission] = useState(false);
     let subscription = null;
 
-    const provideAccess = () => {
+    const requestPermisionAccess = () => {
         (async () => {
 			const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
 			setMediaLibraryPermission(status === 'granted');
@@ -35,34 +34,34 @@ const LandingPage = ({ route, navigation }: Props) => {
             const { status } = await Notifications.requestPermissionsAsync();
 			setNotificationPermission(status === 'granted');
 		})(); 
-       
     }
 
     const goToPictureGallery = () => {
         (async () => {
             let result = await ImagePicker.launchImageLibraryAsync({
                 mediaTypes: ImagePicker.MediaTypeOptions.All,
-                allowsEditing: true,
-                aspect: [9, 16],
+                allowsEditing: false,
                 quality: 1,
             });
         
             if (!result.cancelled) {
                 const {uri} = result;
-                console.log();
                 navigation.push('DisplayPicture', {photoUri: uri})
             }
         })(); 
     }
 
-	useEffect(() => {
-        provideAccess();
-
+    const addOnCloseAppListener = () => {
         subscription = AppState.addEventListener("change", nextAppState => {
             if (nextAppState === "background"){
-              Utils.sendLocalNotification("You left the app! 😱", 'Touch here to return to the application.')
+              Utils.sendLocalNotification("You left the app!", 'Touch here to return to the application.')
             }  
         });
+    }
+
+	useEffect(() => {
+        requestPermisionAccess();
+        addOnCloseAppListener();
 
         return () => {
             subscription.remove();
@@ -108,24 +107,24 @@ const LandingPage = ({ route, navigation }: Props) => {
                                 <View>                            
                                     <Label fontSize={14} paddingBottom={10}>No access to MediaLibrary</Label>
                                     <Button
-                                        title="Provide Access to MediaLibrary"
+                                        title="Provide access to media library"
                                         fontSize={fonts.sm}
                                         color={colors.textIcons}  
                                         backgroundColor={colors.primaryText} 
-                                        onPress={provideAccess}
+                                        onPress={requestPermisionAccess}
                                     />                                  
                                 </View>
                             )}
 
                             {!notificationPermission &&(
                                 <View>                            
-                                    <Label fontSize={14} paddingBottom={10}>No access to Notifications</Label>
+                                    <Label fontSize={14} paddingBottom={10}>No access to notifications</Label>
                                     <Button
-                                        title="Provide Send Notifications"
+                                        title="Provide permisions to send notifications"
                                         fontSize={fonts.sm}
                                         color={colors.textIcons}  
                                         backgroundColor={colors.primaryText} 
-                                        onPress={provideAccess}
+                                        onPress={requestPermisionAccess}
                                     />                                  
                                 </View>
                             )}

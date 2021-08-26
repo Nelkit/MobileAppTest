@@ -17,18 +17,18 @@ const Container = ({
     paddingBottom = padding.sm, 
     children 
 }: Props) => {
-        return (
-            <View 
-                style={{
-                    paddingTop: paddingTop, 
-                    paddingLeft: paddingLeft, 
-                    paddingRight: paddingRight, 
-                    paddingBottom: paddingBottom, 
-                    height: '100%',
-                    width: '100%',
-                }}
-            >{children}</View>
-        );
+    return (
+        <View 
+            style={{
+                paddingTop: paddingTop, 
+                paddingLeft: paddingLeft, 
+                paddingRight: paddingRight, 
+                paddingBottom: paddingBottom, 
+                height: '100%',
+                width: '100%',
+            }}
+        >{children}</View>
+    );
 }
 
 export default Container;

@@ -3,6 +3,7 @@ import { StatusBar } from 'expo-status-bar';
 import {SafeAreaView, StyleSheet, Text, ScrollView} from 'react-native';
 import * as MediaLibrary from 'expo-media-library';
 import * as FileSystem from 'expo-file-system';
+import Toast from 'react-native-root-toast';
 import Col from './../../components/ui/col';
 import Button from './../../components/ui/button';
 import Row from './../../components/ui/row';
@@ -11,9 +12,8 @@ import Container from './../../components/ui/container';
 import Preview from './../../components/ui/preview';
 import BatteryStatus from './../../components/layout/batteryStatus';
 import NetworkStatus from './../../components/layout/networkStatus';
-import {padding, colors, margin} from './../../styles/base';
+import {padding, colors} from './../../styles/base';
 import Services from './../../services';
-import Utils from './../../utils';
 
 interface Props {
     route: any,
@@ -24,7 +24,6 @@ const DisplayPicture = ({ route }: Props) => {
     const [imaggaResponse, setImaggaResponse] = useState('');
     const [isLoading, setIsLoading] = useState(false);
     
-
     const postImaggaTag = async () => {
         setIsLoading(true)
         let fileBase64 = await FileSystem.readAsStringAsync(photoUri, { encoding: 'base64'  });
@@ -35,13 +34,12 @@ const DisplayPicture = ({ route }: Props) => {
         }).catch(error => {
             setIsLoading(false)
         })
- 
     }
 
     const savePictureInGallery = () => {
         (async () => {
             const asset = await MediaLibrary.createAssetAsync(photoUri);
-            Utils.sendLocalNotification("The current image is saved", "Saved image in gallery")
+            Toast.show("The current image is saved to gallery", {duration: Toast.durations.LONG, position: Toast.positions.CENTER});
         })(); 
 
         postImaggaTag();
@@ -76,6 +74,8 @@ const DisplayPicture = ({ route }: Props) => {
                 <Row flex={1}>
                     <Col>
                         <Button 
+                            disabled={isLoading}
+                            disabledText="Wait a moment"
                             title="Save Picture to Gallery" 
                             paddingHorizontal={5}
                             color={colors.textIcons}  

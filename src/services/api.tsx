@@ -15,7 +15,6 @@ const fetchJSON = (url: string, options = {}) => {
         return json;
     })
     .catch(error => {
-        console.log(error)
         throw error;
     });
 }
