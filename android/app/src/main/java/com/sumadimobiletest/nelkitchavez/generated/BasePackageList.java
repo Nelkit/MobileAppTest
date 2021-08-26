@@ -19,6 +19,7 @@ public class BasePackageList {
         new expo.modules.keepawake.KeepAwakePackage(),
         new expo.modules.medialibrary.MediaLibraryPackage(),
         new expo.modules.network.NetworkPackage(),
+        new expo.modules.notifications.NotificationsPackage(),
         new expo.modules.permissions.PermissionsPackage(),
         new expo.modules.splashscreen.SplashScreenPackage(),
         new expo.modules.updates.UpdatesPackage()
